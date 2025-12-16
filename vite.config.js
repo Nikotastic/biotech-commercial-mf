@@ -7,12 +7,13 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@shared": path.resolve(__dirname, "./src/shared"),
     },
   },
   plugins: [
     react(),
     federation({
-      name: "inventoryMF",
+      name: "commercialMF",
       filename: "remoteEntry.js",
       exposes: {
         "./CommercialDashboard":
