@@ -1,31 +1,36 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import federation from '@originjs/vite-plugin-federation'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import federation from "@originjs/vite-plugin-federation";
+import path from "path";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   plugins: [
     react(),
     federation({
-      name: 'commercialMF',
-      filename: 'remoteEntry.js',
+      name: "inventoryMF",
+      filename: "remoteEntry.js",
       exposes: {
-        './SalesDashboard': './src/features/sales/components/SalesDashboard.jsx',
-        './SalesForm': './src/features/sales/components/SalesForm.jsx',
-        './ClientsList': './src/features/clients/components/ClientsList.jsx',
-        './InvoicesList': './src/features/invoices/components/InvoicesList.jsx',
-        './SalesReport': './src/features/reports/components/SalesReport.jsx',
-        './CommercialStore': './src/shared/store/commercialStore.js'
+        "./CommercialDashboard":
+          "./src/features/dashboard/components/CommercialDashboard.jsx",
+        "./SalesDashboard":
+          "./src/features/sales/components/SalesDashboard.jsx",
+        "./CommercialStore": "./src/shared/store/commercialStore.js",
       },
-      shared: ['react', 'react-dom', 'react-router-dom', 'zustand', 'axios']
-    })
+      shared: ["react", "react-dom", "react-router-dom", "zustand", "axios"],
+    }),
   ],
   build: {
-    target: 'esnext',
+    target: "esnext",
     minify: false,
-    cssCodeSplit: false
+    cssCodeSplit: false,
   },
   server: {
-    port: 5007,
-    cors: true
-  }
-})
+    port: 5006,
+    cors: true,
+  },
+});
