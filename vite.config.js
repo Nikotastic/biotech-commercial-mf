@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: "inventoryMF",
+      name: "commercialMF",
       filename: "remoteEntry.js",
       exposes: {
         "./CommercialDashboard":
