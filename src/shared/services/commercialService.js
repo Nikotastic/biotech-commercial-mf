@@ -1,10 +1,11 @@
 import apiClient from "../utils/apiClient";
 
-export const transactionService = {
-  // Create a new transaction
-  create: async (transactionData) => {
+export const commercialService = {
+  // ========== TRANSACTIONS ==========
+
+  // POST /api/transactions - Create a new transaction
+  createTransaction: async (transactionData) => {
     try {
-      // POST /api/transactions
       const response = await apiClient.post("/transactions", transactionData);
       return response.data;
     } catch (error) {
@@ -13,12 +14,17 @@ export const transactionService = {
     }
   },
 
-  // Get transactions with optional filters
-  getAll: async (filters = {}) => {
+  // GET /api/transactions - Get transactions (Query: farmId, type, date)
+  getTransactions: async (filters = {}) => {
     try {
-      const params = new URLSearchParams(filters).toString();
-      // GET /api/transactions?farmId=...&fromDate=...
-      const url = params ? `/transactions?${params}` : "/transactions";
+      const params = new URLSearchParams();
+      if (filters.farmId) params.append("farmId", filters.farmId);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.date) params.append("date", filters.date);
+
+      const url = params.toString()
+        ? `/transactions?${params.toString()}`
+        : "/transactions";
       const response = await apiClient.get(url);
       return response.data;
     } catch (error) {
@@ -27,10 +33,9 @@ export const transactionService = {
     }
   },
 
-  // Get transaction details by ID
-  getById: async (id) => {
+  // GET /api/transactions/{id} - Get transaction by ID
+  getTransactionById: async (id) => {
     try {
-      // GET /api/transactions/{id}
       const response = await apiClient.get(`/transactions/${id}`);
       return response.data;
     } catch (error) {
@@ -39,10 +44,9 @@ export const transactionService = {
     }
   },
 
-  // Get animals associated with a transaction
-  getAnimals: async (id) => {
+  // GET /api/transactions/{id}/animals - Get animals involved in a transaction
+  getTransactionAnimals: async (id) => {
     try {
-      // GET /api/transactions/{id}/animals
       const response = await apiClient.get(`/transactions/${id}/animals`);
       return response.data;
     } catch (error) {
@@ -51,10 +55,9 @@ export const transactionService = {
     }
   },
 
-  // Get products associated with a transaction
-  getProducts: async (id) => {
+  // GET /api/transactions/{id}/products - Get products involved in a transaction
+  getTransactionProducts: async (id) => {
     try {
-      // GET /api/transactions/{id}/products
       const response = await apiClient.get(`/transactions/${id}/products`);
       return response.data;
     } catch (error) {
@@ -62,14 +65,13 @@ export const transactionService = {
       throw error;
     }
   },
-};
 
-export const thirdPartyService = {
-  // C  reate a new third party
-  create: async (data) => {
+  // ========== THIRD PARTIES ==========
+
+  // POST /api/third-parties - Create a third party (customer/supplier)
+  createThirdParty: async (thirdPartyData) => {
     try {
-      // POST /api/third-parties
-      const response = await apiClient.post("/third-parties", data);
+      const response = await apiClient.post("/third-parties", thirdPartyData);
       return response.data;
     } catch (error) {
       console.error("Error creating third party:", error);
@@ -77,11 +79,13 @@ export const thirdPartyService = {
     }
   },
 
-  // Update a third party
-  update: async (id, data) => {
+  // PUT /api/third-parties/{id} - Update a third party
+  updateThirdParty: async (id, thirdPartyData) => {
     try {
-      // PUT /api/third-parties/{id}
-      const response = await apiClient.put(`/third-parties/${id}`, data);
+      const response = await apiClient.put(
+        `/third-parties/${id}`,
+        thirdPartyData
+      );
       return response.data;
     } catch (error) {
       console.error(`Error updating third party ${id}:`, error);
@@ -89,13 +93,10 @@ export const thirdPartyService = {
     }
   },
 
-  // Get third parties with optional filters
-  getAll: async (filters = {}) => {
+  // GET /api/third-parties - Get third parties
+  getThirdParties: async () => {
     try {
-      const params = new URLSearchParams(filters).toString();
-      // GET /api/third-parties?filters...
-      const url = params ? `/third-parties?${params}` : "/third-parties";
-      const response = await apiClient.get(url);
+      const response = await apiClient.get("/third-parties");
       return response.data;
     } catch (error) {
       console.error("Error fetching third parties:", error);
@@ -103,10 +104,9 @@ export const thirdPartyService = {
     }
   },
 
-  // Get third party details by ID
-  getById: async (id) => {
+  // GET /api/third-parties/{id} - Get third party by ID
+  getThirdPartyById: async (id) => {
     try {
-      // GET /api/third-parties/{id}
       const response = await apiClient.get(`/third-parties/${id}`);
       return response.data;
     } catch (error) {
@@ -114,11 +114,6 @@ export const thirdPartyService = {
       throw error;
     }
   },
-};
-
-export const commercialService = {
-  transactions: transactionService,
-  thirdParties: thirdPartyService,
 };
 
 export default commercialService;
