@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === "true";
-const API_URL = import.meta.env.VITE_API_GATEWAY_URL || "https://api-gateway-bio-tech.up.railway.app/api";
+const USE_MOCK_API = false;
+const API_URL = "/api";
 
 const apiClient = axios.create({
-  baseURL: USE_MOCK_API ? "http://localhost:9999/mock-api" : API_URL,
+  baseURL: API_URL,
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });
